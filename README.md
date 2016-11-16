@@ -1,4 +1,71 @@
-# jQuery.qrcode
+### 说明
+[JSqrcode](https://github.com/shaozujie/JSqrcode)是一个在浏览器端使用原生js生成二维码的js库，改自[Lars Jung](https://larsjung.de)的[jquery-qrcode](https://github.com/lrsjng/jquery-qrcode),在原作者的基础上去除了jquery依赖。
+
+### 使用
+[JSqrcode](https://github.com/shaozujie/JSqrcode)在`window`对象上注册了全局`qrcode`对象，使用示例如下：
+```[javascript]
+	qrcode(document.getElementById('container',{
+    	// 渲染方式，可选`'canvas'`, `'image'` or `'div'`，默认image
+    	render: 'canvas',
+
+    	// version range somewhere in 1 .. 40
+    	minVersion: 1,
+    	maxVersion: 40,
+
+    	// error correction level: `'L'`, `'M'`, `'Q'` or `'H'`
+    	ecLevel: 'L',
+
+    	// offset in pixel if drawn onto existing canvas
+    	left: 0,
+    	top: 0,
+
+    	// size in pixel
+    	size: 200,
+
+    	// code color or image element
+    	fill: '#000',
+
+    	// background color or image element, `null` for transparent background
+    	background: null,
+
+    	// content
+    	text: 'no text',
+
+    	// corner radius relative to module width: 0.0 .. 0.5
+    	radius: 0,
+
+    	// quiet zone in modules
+    	quiet: 0,
+
+    	// modes
+    	// 0: normal
+    	// 1: label strip
+    	// 2: label box
+    	// 3: image strip
+    	// 4: image box
+    	mode: 0,
+
+		// label大小比例和相对位置
+    	mSize: 0.1,
+    	mPosX: 0.5,
+    	mPosY: 0.5,
+
+    	label: 'no label',
+    	fontname: 'sans',
+    	fontcolor: '#000',
+
+    	image: null
+    }))
+```
+
+
+
+
+
+
+### 注：以下为[jquery-qrcode](https://github.com/lrsjng/jquery-qrcode)原说明
+
+## jQuery.qrcode
 
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![bower][bower-img]][github]
 
