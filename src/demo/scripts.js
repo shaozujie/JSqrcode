@@ -47,7 +47,10 @@
             image: jq('#img-buffer')[0]
         };
 
-        jq('#container').empty().qrcode(options);
+        // 修改
+        // jq('#container').empty().qrcode(options);
+        document.getElementById('container').innerHTML='';
+        qrcode(document.getElementById('container'),options);
     }
 
     function update() {

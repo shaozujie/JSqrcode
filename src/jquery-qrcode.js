@@ -1,7 +1,8 @@
 (function (vendor_qrcode) {
     'use strict';
 
-    var jq = window.jQuery;
+    // 修改
+    // var jq = window.jQuery;
 
     // Check if canvas is available in the browser (as Modernizr does)
     var hasCanvas = (function () {
@@ -72,7 +73,10 @@
     function drawBackgroundLabel(qr, context, settings) {
         var size = settings.size;
         var font = 'bold ' + settings.mSize * size + 'px ' + settings.fontname;
-        var ctx = jq('<canvas/>')[0].getContext('2d');
+
+        // 修改
+        // var ctx = jq('<canvas/>')[0].getContext('2d');
+        var ctx = document.createElement('canvas').getContext("2d");
 
         ctx.font = font;
 
@@ -122,7 +126,9 @@
     }
 
     function drawBackground(qr, context, settings) {
-        if (jq(settings.background).is('img')) {
+        // 修改
+        // if (jq(settings.background).is('img')) {
+        if (settings.background && settings.background.tagName && settings.background.tagName.toLowerCase()=='img') {
             context.drawImage(settings.background, 0, 0, settings.size, settings.size);
         } else if (settings.background) {
             context.fillStyle = settings.background;
@@ -256,7 +262,9 @@
                 fn(qr, context, settings, l, t, w, row, col);
             }
         }
-        if (jq(settings.fill).is('img')) {
+        // 修改
+        // if (jq(settings.fill).is('img')) {
+        if (settings.fill && settings.fill.tagName && settings.fill.tagName.toLowerCase()=='img') {
             context.strokeStyle = 'rgba(0,0,0,0.5)';
             context.lineWidth = 2;
             context.stroke();
@@ -281,24 +289,41 @@
             return null;
         }
 
-        var $canvas = jq(canvas).data('qrcode', qr);
-        var context = $canvas[0].getContext('2d');
+        // 修改
+        // var $canvas = jq(canvas).data('qrcode', qr);
+        // var context = $canvas[0].getContext('2d');
+        canvas.setAttribute('data-qrcode',JSON.stringify(qr));
+        var context = canvas.getContext('2d');
 
         drawBackground(qr, context, settings);
         drawModules(qr, context, settings);
 
-        return $canvas;
+        // 修改
+        // return $canvas;
+        return canvas;
     }
 
     // Returns a `canvas` element representing the QR code for the given settings.
     function createCanvas(settings) {
-        var $canvas = jq('<canvas/>').attr('width', settings.size).attr('height', settings.size);
-        return drawOnCanvas($canvas, settings);
+        // 修改
+        // var $canvas = jq('<canvas/>').attr('width', settings.size).attr('height', settings.size);
+        var canvas = document.createElement('canvas');
+        canvas.setAttribute('width',settings.size);
+        canvas.setAttribute('height',settings.size);
+
+        // 修改
+        // return drawOnCanvas($canvas, settings);
+        return drawOnCanvas(canvas, settings);
     }
 
     // Returns an `image` element representing the QR code for the given settings.
     function createImage(settings) {
-        return jq('<img/>').attr('src', createCanvas(settings)[0].toDataURL('image/png'));
+        // 修改
+        // return jq('<img/>').attr('src', createCanvas(settings)[0].toDataURL('image/png'));
+        var img = new Image();
+        img.src = createCanvas(settings).toDataURL('image/png');
+        return img;
+        
     }
 
     // Returns a `div` element representing the QR code for the given settings.
@@ -338,27 +363,40 @@
             'background-color': settings.fill
         };
 
-        var $div = jq('<div/>').data('qrcode', qr).css(containerCSS);
+        // 修改
+        // var $div = jq('<div/>').data('qrcode', qr).css(containerCSS);
+        var div = document.createElement('div');
+        div.setAttribute('data-qrcode',JSON.stringify(qr));
+        div.style.cssText=containerCSS;
 
         if (settings_bgColor) {
-            $div.css('background-color', settings_bgColor);
+            // 修改
+            // $div.css('background-color', settings_bgColor);
+            div.style.backgroundColor = settings_bgColor;
         }
 
         for (row = 0; row < moduleCount; row += 1) {
             for (col = 0; col < moduleCount; col += 1) {
                 if (qr.isDark(row, col)) {
-                    jq('<div/>')
-                        .css(darkCSS)
-                        .css({
-                            left: offset + col * moduleSize,
-                            top: offset + row * moduleSize
-                        })
-                        .appendTo($div);
+                    // 修改
+                    // jq('<div/>')
+                    //     .css(darkCSS)
+                    //     .css({
+                    //         left: offset + col * moduleSize,
+                    //         top: offset + row * moduleSize
+                    //     })
+                    //     .appendTo($div);
+                    var _div = document.createElement('div');
+                    _div.style.cssText=darkCSS;
+                    _div.style.left = offset + col * moduleSize;
+                    _div.style.top = offset + row * moduleSize;
+                    div.appendChild(_div);
                 }
             }
         }
-
-        return $div;
+        // 修改
+        // return $div;
+        return div;
     }
 
     function createHTML(settings) {
@@ -430,16 +468,30 @@
 
     // Register the plugin
     // -------------------
-    jq.fn.qrcode = function (options) {
-        var settings = jq.extend({}, defaults, options);
+    // 修改
+    // jq.fn.qrcode = function (options) {
+    //     var settings = jq.extend({}, defaults, options);
 
-        return this.each(function (idx, el) {
-            if (el.nodeName.toLowerCase() === 'canvas') {
-                drawOnCanvas(el, settings);
-            } else {
-                jq(el).append(createHTML(settings));
-            }
-        });
+    //     return this.each(function (idx, el) {
+    //         if (el.nodeName.toLowerCase() === 'canvas') {
+    //             drawOnCanvas(el, settings);
+    //         } else {
+    //             jq(el).append(createHTML(settings));
+    //         }
+    //     });
+    // };
+    window.qrcode = function(element,options) {
+        var settings = defaults;
+        for(var key in options){
+            settings[key]=options[key];
+        }
+
+        if (element.tagName.toLowerCase() === 'canvas') {
+            drawOnCanvas(element, settings);
+        } else {
+            element.appendChild(createHTML(settings));
+        }
+
     };
 }(function () {
     // `qrcode` is the single public function defined by the `QR Code Generator`
