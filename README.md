@@ -1,8 +1,8 @@
 ### 说明
-[JSqrcode](https://github.com/shaozujie/JSqrcode)是一个在浏览器端使用原生js生成二维码的js库，改自[Lars Jung](https://larsjung.de)的[jquery-qrcode](https://github.com/lrsjng/jquery-qrcode),在原作者的基础上去除了jquery依赖。
+[JSqrcode](https://github.com/shaozujie/JSqrcode)是一个在浏览器端使用原生js生成二维码的js库，修改自[Lars Jung](https://larsjung.de)的[jquery-qrcode](https://github.com/lrsjng/jquery-qrcode),在原作者的基础上去除了jquery依赖。
 
 ### 使用
-[JSqrcode](https://github.com/shaozujie/JSqrcode)在`window`对象上注册了全局`qrcode`对象，使用示例如下：
+[JSqrcode](https://github.com/shaozujie/JSqrcode)可直接通过脚本链接/CommonJS/AMD等方式导入qrcode对象，使用示例如下：
 ```[javascript]
 	qrcode(document.getElementById('container',{
     	// 渲染方式，可选`'canvas'`, `'image'` or `'div'`，默认image
